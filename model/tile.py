@@ -1,5 +1,5 @@
 class Tile:
     def __init__(self):
-        self.character = None
+        self.piece = None
         #move cost
         #terrain type
