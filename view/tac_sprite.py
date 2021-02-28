@@ -3,26 +3,25 @@ import math
 import pygame as pg
 
 class TacSprite:
-    def __init__(self, image, surface, pos, draw_centered=False):
-        self.image = image
+    def __init__(self, image, surface, pos, hex_radius):
+        self.__size_factor = 1.5
+        self.__size = math.floor(hex_radius * self.__size_factor)
+        self.image = pg.transform.scale(image, (self.__size, self.__size))
         self.surface = surface
         self.pos = pos
         self.target_pos = None
-        self.draw_centered = draw_centered
+        self.__hex_radius = hex_radius
         self.speed = 1
 
     def draw(self):
-        if self.draw_centered:
-            pos = self.get_center()
-        else:
-            pos = self.pos
-        self.surface.blit(self.image, pos)
+        if self.target_pos:
+            self.move()
+        self.surface.blit(self.image, self.get_center())
 
     def get_center(self):
         x, y = self.pos
-        width, height = self.image.get_size()
-        x_offset, y_offset = width / 2, height / 2
-        return (x - x_offset, y - y_offset)
+        offset = self.image.get_width() / 2
+        return (x - offset, y - offset)
 
     def move(self):
         if self.target_pos:
