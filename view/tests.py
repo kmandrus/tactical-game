@@ -7,12 +7,6 @@ from hexagon_view import HexagonView
 from tac_sprite import TacSprite
 from hex_board_view import HexBoardView
 
-
-class MockImage:
-    def get_size(self):
-        return (32, 32)
-
-
 #Setup
 pg.init()
 DIMENSIONS = (800, 600)
@@ -44,18 +38,17 @@ assert hexagon.get_points() == points
 
 
 #TacSprite
-mock_image = MockImage()
+image = pg.image.load('../images/token_1.png')
 pix_pos = (50, 100)
 target_pix_pos = (300, 400)
-sprite = TacSprite(mock_image, mock_surface, pix_pos)
-
-assert sprite.image == mock_image
+sprite = TacSprite(image, mock_surface, pix_pos, HEX_RADIUS)
+sprite_size = (math.floor(HEX_RADIUS * 1.5), math.floor(HEX_RADIUS * 1.5))
+assert sprite.image.get_size() == sprite_size
 assert sprite.surface == mock_surface
 assert sprite.pos == pix_pos
-assert sprite.draw_centered == False
 
 #TacSprite#get_center
-assert sprite.get_center() == (34, 84)
+assert sprite.get_center() == (26, 76)
 
 #TacSprite#get_velocity
 sprite.pos = 100, 100
@@ -91,6 +84,7 @@ assert board.width == width
 assert board.height == height
 assert board.hex_radius == HEX_RADIUS
 assert board.pix_units == pix_units
+assert isinstance(board.sprites, list)
 
 #HexBoardView#get_hexagon
 for pos in hex_positions:
@@ -120,6 +114,8 @@ edge_case_pos_pairs = [
 ]
 for pix_pos, hex_pos in edge_case_pos_pairs:
     assert board.to_hex(pix_pos) == hex_pos
-
+#HexBoardView#add_sprite
+board.add_sprite('mock_sprite')
+assert board.sprites == ['mock_sprite']
 
 print("View unit tests successful!")
