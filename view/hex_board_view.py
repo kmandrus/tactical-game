@@ -44,6 +44,7 @@ class HexBoardView:
         self.__hexagons = {
             pos: HexagonView(surface, self.to_pix(pos), hex_radius)
             for pos in hex_pos_list}
+        self.sprites = []
 
     def get_hexagon(self, hex_pos):
         return self.__hexagons[hex_pos]
@@ -51,11 +52,16 @@ class HexBoardView:
     def draw(self):
         for hexagon in self.__hexagons.values():
             hexagon.draw()
+        for sprite in self.sprites:
+            sprite.draw()
 
     def to_pix(self, hex_pos):
         x_hex, y_hex = hex_pos
         x_unit, y_unit = self.pix_units
         return (x_unit * x_hex, y_unit * y_hex)
+
+    def add_sprite(self, sprite):
+        self.sprites.append(sprite)
 
     def to_hex(self, pix_pos):
         partial_hex_pos, remainders = self.__to_partial_hex_pos_and_remainders(
