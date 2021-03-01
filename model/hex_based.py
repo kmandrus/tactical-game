@@ -1,19 +1,17 @@
-from tile import Tile
-from piece import Piece
-
 def to_empty_grid(pos_list):
     return {pos: Tile() for pos in pos_list}
+
 
 class Board:
     def __init__(self, grid):
         self.__grid = grid
-    
+
     def get_tile(self, pos):
         return self.__grid[pos]
-    
+
     def add_piece(self, piece, pos):
         self.get_tile(pos).piece = piece
-    
+
     def remove_piece(self, pos):
         self.get_tile(pos).piece = None
 
@@ -29,3 +27,15 @@ class Board:
 
     def is_empty_at(self, pos):
         return self.get_tile(pos).piece == None
+
+
+class Piece:
+    def __init__(self, name):
+        self.name = name
+
+
+class Tile:
+    def __init__(self):
+        self.piece = None
+        #move cost
+        #terrain type

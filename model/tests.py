@@ -1,7 +1,4 @@
-from tile import Tile
-from piece import Piece
-from board import Board
-from board import to_empty_grid
+from hex_based import *
 
 
 #Piece Tests
