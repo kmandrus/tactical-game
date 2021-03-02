@@ -1,6 +1,6 @@
 import pygame as pg
 
-from hex_board_view import HexBoardView
+from hex_board_view import BoardView
 
 def create_hex_pos_list(width, height):
     positions = []
@@ -20,7 +20,7 @@ RADIUS = 32
 screen = pg.display.set_mode(DIMENSIONS)
 pg.display.set_caption("Pixel to Hexagonal Coordinate Conversion Demo")
 
-board = HexBoardView(screen, DIMENSIONS, RADIUS, create_hex_pos_list(18, 13))
+board = BoardView(screen, DIMENSIONS, RADIUS, create_hex_pos_list(18, 13))
 
 running = True
 while running:

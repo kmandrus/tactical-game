@@ -4,9 +4,7 @@ View package tests for visual inspection
 
 import pygame as pg
 
-from hexagon_view import HexagonView
-from hex_board_view import HexBoardView
-from tac_sprite import TacSprite
+from hex_views import *
 
 
 def create_hex_pos_list(width, height):
@@ -28,11 +26,11 @@ RADIUS = 64
 screen = pg.display.set_mode(DIMENSIONS)
 pg.display.set_caption("Render tests for the View package")
 
-board_view = HexBoardView(screen, DIMENSIONS, RADIUS, create_hex_pos_list(18, 13))
+board_view = BoardView(screen, DIMENSIONS, RADIUS, create_hex_pos_list(18, 13))
 
-token_art = pg.image.load('../images/token_1.png')
+token_art = pg.image.load('./images/token_1.png')
 sprite_start_pos = board_view.to_pix((3, 5))
-sprite = TacSprite(token_art, screen, sprite_start_pos, RADIUS)
+sprite = PieceView(token_art, screen, sprite_start_pos, RADIUS)
 
 board_view.add_sprite(sprite)
 

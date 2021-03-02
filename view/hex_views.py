@@ -2,10 +2,8 @@ import math
 
 import pygame as pg
 
-from hexagon_view import HexagonView
 
-
-class HexBoardView:
+class BoardView:
     """
     A View to represent a Hexagonal Coordinate System
 
@@ -35,6 +33,7 @@ class HexBoardView:
     a hexagonal grid with ALL (both implict and explitict) coordinates listed 
     to understand it. Sorry to myself... in the future.
     """
+
     def __init__(self, surface, dimensions, hex_radius, hex_pos_list):
         self.surface = surface
         self.width, self.height = dimensions
@@ -42,7 +41,7 @@ class HexBoardView:
         self.pix_units = (self.hex_radius * 1.5,
                           self.hex_radius * (math.sqrt(3) / 2))
         self.__hexagons = {
-            pos: HexagonView(surface, self.to_pix(pos), hex_radius)
+            pos: TileView(surface, self.to_pix(pos), hex_radius)
             for pos in hex_pos_list}
         self.sprites = []
 
@@ -130,3 +129,76 @@ class HexBoardView:
             return (x, y + 1)
         else:
             return (x + 1, y)
+
+
+class TileView:
+    def __init__(self, surface, center, radius):
+        self.surface = surface
+        self.center = center
+        self.radius = radius
+        self.half_height = (math.sqrt(3) * radius) / 2
+        self.is_filled = False
+        self.fill_color = pg.Color(0, 0, 200)
+
+    def draw(self):
+        pg.draw.aalines(self.surface, (0, 0, 0), True, self.get_points())
+        if self.is_filled:
+            pg.draw.polygon(self.surface, self.fill_color,
+                            self.get_points(), 0)
+
+    def get_points(self):
+        deltas = [
+            (-self.radius / 2, -self.half_height),
+            (self.radius / 2, -self.half_height),
+            (self.radius, 0),
+            (self.radius / 2, self.half_height),
+            (-self.radius / 2, self.half_height),
+            (-self.radius, 0)
+        ]
+        return [self.__apply_delta(self.center, delta) for delta in deltas]
+
+    def __apply_delta(self, pos, delta):
+        x, y = pos
+        dx, dy = delta
+        return (x + dx, y + dy)
+
+
+class PieceView:
+    def __init__(self, image, surface, pos, hex_radius):
+        self.__size_factor = 1.5
+        self.__size = math.floor(hex_radius * self.__size_factor)
+        self.image = pg.transform.scale(image, (self.__size, self.__size))
+        self.surface = surface
+        self.pos = pos
+        self.target_pos = None
+        self.__hex_radius = hex_radius
+        self.speed = 1
+
+    def draw(self):
+        if self.target_pos:
+            self.move()
+        self.surface.blit(self.image, self.get_center())
+
+    def get_center(self):
+        x, y = self.pos
+        offset = self.image.get_width() / 2
+        return (x - offset, y - offset)
+
+    def move(self):
+        if self.target_pos:
+            if math.dist(self.pos, self.target_pos) < self.speed:
+                self.pos = self.target_pos
+            else:
+                x, y = self.pos
+                delta_x, delta_y = self.get_velocity()
+                self.pos = (x + delta_x, y + delta_y)
+
+    def get_velocity(self):
+        if self.target_pos:
+            steps = math.dist(self.pos, self.target_pos) / self.speed
+            delta_x, delta_y = [
+                target - pos for pos, target
+                in zip(self.pos, self.target_pos)]
+            return (delta_x / steps, delta_y / steps)
+        else:
+            raise Exception("target_pos must contain a pixel_position")
