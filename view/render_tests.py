@@ -1,11 +1,11 @@
 """
 View package tests for visual inspection
 """
+import os
 
 import pygame as pg
 
 from hex_views import *
-
 
 def create_hex_pos_list(width, height):
     positions = []
@@ -20,6 +20,9 @@ def create_hex_pos_list(width, height):
 
 pg.init()
 
+main_dir = os.path.split(os.path.dirname(__file__))[0]
+images_dir = os.path.join(main_dir, 'images')
+
 DIMENSIONS = (800, 600)
 RADIUS = 64
 
@@ -28,7 +31,7 @@ pg.display.set_caption("Render tests for the View package")
 
 board_view = BoardView(screen, DIMENSIONS, RADIUS, create_hex_pos_list(18, 13))
 
-token_art = pg.image.load('./images/token_1.png')
+token_art = pg.image.load(os.path.join(images_dir, 'token_1.png'))
 sprite_start_pos = board_view.to_pix((3, 5))
 sprite = PieceView(token_art, screen, sprite_start_pos, RADIUS)
 
