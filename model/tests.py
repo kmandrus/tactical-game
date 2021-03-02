@@ -1,4 +1,4 @@
-from hex_based import *
+from hex_model import *
 
 
 #Piece Tests
