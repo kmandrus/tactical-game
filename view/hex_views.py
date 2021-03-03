@@ -47,12 +47,18 @@ class BoardView:
 
     def get_hexagon(self, hex_pos):
         return self.__hexagons[hex_pos]
-
-    def draw(self):
-        for hexagon in self.__hexagons.values():
-            hexagon.draw()
+    
+    def update(self):
         for sprite in self.sprites:
-            sprite.draw()
+            sprite.update()
+        for tile in self.__hexagons.values():
+            tile.update()
+
+    def render(self):
+        for hexagon in self.__hexagons.values():
+            hexagon.render()
+        for sprite in self.sprites:
+            sprite.render()
 
     def to_pix(self, hex_pos):
         x_hex, y_hex = hex_pos
@@ -140,11 +146,13 @@ class TileView:
         self.is_filled = False
         self.fill_color = pg.Color(0, 0, 200)
 
-    def draw(self):
+    def update(self):
+        pass
+
+    def render(self):
         pg.draw.aalines(self.surface, (0, 0, 0), True, self.get_points())
         if self.is_filled:
-            pg.draw.polygon(self.surface, self.fill_color,
-                            self.get_points(), 0)
+            pg.draw.polygon(self.surface, self.fill_color, self.get_points(), 0)
 
     def get_points(self):
         deltas = [
@@ -173,10 +181,12 @@ class PieceView:
         self.target_pos = None
         self.__hex_radius = hex_radius
         self.speed = 1
-
-    def draw(self):
+    
+    def update(self):
         if self.target_pos:
             self.move()
+
+    def render(self):
         self.surface.blit(self.image, self.get_center())
 
     def get_center(self):

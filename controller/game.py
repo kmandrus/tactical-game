@@ -10,7 +10,7 @@ class Game:
     def play(self):
         while self.running:
             self.handle_events()
-            self.next_frame()
+            self.update()
             self.render()
     
     def handle_events(self):
@@ -22,8 +22,8 @@ class Game:
 
     def render(self):
         self.screen.fill((64, 128, 64))
-        self.board_view.draw()
+        self.board_view.render()
         pg.display.update()
 
-    def next_frame(self):
-        pass
+    def update(self):
+        self.board_view.update()

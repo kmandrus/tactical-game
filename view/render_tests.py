@@ -47,5 +47,6 @@ while running:
             center_of_hex = board_view.to_pix(hex_pos)
             sprite.target_pos = center_of_hex
     screen.fill((64, 128, 64))
-    board_view.draw()        
+    board_view.update()
+    board_view.render()        
     pg.display.update()
