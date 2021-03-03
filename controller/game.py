@@ -19,6 +19,9 @@ class Game:
                 self.running = False
             if event.type == pg.MOUSEBUTTONUP:
                 hex_pos = self.board_view.to_hex(pg.mouse.get_pos())
+                sprites = self.board_view.sprites
+                for sprite in sprites:
+                    sprite.target_pos = self.board_view.to_pix(hex_pos)
 
     def render(self):
         self.screen.fill((64, 128, 64))
