@@ -6,6 +6,7 @@ name = 'Ajani'
 piece = Piece(name)
 assert piece.name == name
 assert piece.id is None
+assert piece.pos is None
 
 
 #Tile Tests
@@ -40,12 +41,13 @@ except KeyError:
 assert not board.get_tile(pos).piece
 
 #Board#add_piece
-mock_piece = "mock"
-board.add_piece(mock_piece, pos)
-assert board.get_tile(pos).piece == mock_piece
+piece = Piece("test_piece")
+board.add_piece(piece, pos)
+assert board.get_tile(pos).piece == piece
+assert piece.pos == pos
 
 #Board#get_piece_at
-assert board.get_piece_at(pos) == mock_piece
+assert board.get_piece_at(pos) == piece
 
 #Board#is_empty_at
 assert board.is_empty_at(other_pos)
@@ -56,15 +58,17 @@ board.remove_piece(pos)
 assert not board.get_piece_at(pos)
 assert not board.get_tile(other_pos).piece
 assert board.is_empty_at(pos)
+assert piece.pos == None
 
 #Board#move_piece
-board.add_piece(mock_piece, pos)
+board.add_piece(piece, pos)
 board.move_piece(pos, other_pos)
+assert piece.pos == other_pos
 assert not board.get_tile(pos).piece
 assert not board.get_piece_at(pos)
 assert board.is_empty_at(pos)
-assert board.get_tile(other_pos).piece == mock_piece
-assert board.get_piece_at(other_pos) == mock_piece
+assert board.get_tile(other_pos).piece == piece
+assert board.get_piece_at(other_pos) == piece
 assert not board.is_empty_at(other_pos)
 try:
     board.move_piece(pos, other_pos)

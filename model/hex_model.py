@@ -11,9 +11,12 @@ class Board:
 
     def add_piece(self, piece, pos):
         self.get_tile(pos).piece = piece
+        piece.pos = pos
 
     def remove_piece(self, pos):
+        piece = self.get_piece_at(pos)
         self.get_tile(pos).piece = None
+        piece.pos = None
 
     def move_piece(self, start, end):
         if (piece := self.get_tile(start).piece) and self.is_empty_at(end):
@@ -40,6 +43,7 @@ class Piece:
     def __init__(self, name):
         self.name = name
         self.id = None
+        self.pos = None
 
 
 class Tile:
