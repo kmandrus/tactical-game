@@ -72,5 +72,11 @@ try:
 except Exception:
     pass
 
+#Board#is_valid_pos
+valid_pos = (3, 5)
+invalid_pos = (50, -3)
+assert board.is_valid_pos(valid_pos)
+assert not board.is_valid_pos(invalid_pos)
+
 
 print("Model unit tests successful!")

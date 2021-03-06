@@ -27,6 +27,13 @@ class Board:
 
     def is_empty_at(self, pos):
         return self.get_tile(pos).piece == None
+    
+    def is_valid_pos(self, pos):
+        try:
+            self.__grid[pos]
+        except KeyError:
+            return False
+        return True
 
 
 class Piece:
