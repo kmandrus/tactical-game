@@ -45,7 +45,7 @@ while running:
         if event.type == pg.MOUSEBUTTONUP:
             hex_pos = board_view.to_hex(pg.mouse.get_pos())
             center_of_hex = board_view.to_pix(hex_pos)
-            sprite.target_pos = center_of_hex
+            sprite.set_target_pos(center_of_hex)
     screen.fill((64, 128, 64))
     board_view.update()
     board_view.render()        

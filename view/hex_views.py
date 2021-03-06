@@ -59,6 +59,9 @@ class BoardView:
             hexagon.render()
         for sprite in self.sprites:
             sprite.render()
+    
+    def move_sprite(self, sprite, pos, callback=None):
+        sprite.set_target_pos(pos, callback)
 
     def to_pix(self, hex_pos):
         x_hex, y_hex = hex_pos
@@ -178,13 +181,14 @@ class TacSprite:
         self.image = pg.transform.scale(image, (self.__size, self.__size))
         self.surface = surface
         self.pos = pos
-        self.target_pos = None
+        self.__target_pos = None
         self.__hex_radius = hex_radius
         self.speed = 1
         self.id = None
+        self.__on_move_complete = None
     
     def update(self):
-        if self.target_pos:
+        if self.__target_pos:
             self.move()
 
     def render(self):
@@ -196,20 +200,28 @@ class TacSprite:
         return (x - offset, y - offset)
 
     def move(self):
-        if self.target_pos:
-            if math.dist(self.pos, self.target_pos) < self.speed:
-                self.pos = self.target_pos
+        if self.__target_pos:
+            if math.dist(self.pos, self.__target_pos) < self.speed:
+                self.pos = self.__target_pos
+                self.__target_pos = None
+                if callback := self.__on_move_complete:
+                    self.on_move_complete = None
+                    callback()
             else:
                 x, y = self.pos
                 delta_x, delta_y = self.get_velocity()
                 self.pos = (x + delta_x, y + delta_y)
 
     def get_velocity(self):
-        if self.target_pos:
-            steps = math.dist(self.pos, self.target_pos) / self.speed
+        if self.__target_pos:
+            steps = math.dist(self.pos, self.__target_pos) / self.speed
             delta_x, delta_y = [
                 target - pos for pos, target
-                in zip(self.pos, self.target_pos)]
+                in zip(self.pos, self.__target_pos)]
             return (delta_x / steps, delta_y / steps)
         else:
             raise Exception("target_pos must contain a pixel_position")
+    
+    def set_target_pos(self, pos, callback=None):
+        self.__target_pos = pos
+        self.__on_move_complete = callback

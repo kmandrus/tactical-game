@@ -51,7 +51,7 @@ assert sprite.get_center() == (26, 76)
 
 #TacSprite#get_velocity
 sprite.pos = 100, 100
-sprite.target_pos = 400, 500
+sprite.set_target_pos((400, 500))
 sprite.speed = 5
 assert sprite.get_velocity() == (3, 4)
 
@@ -60,13 +60,22 @@ sprite.move()
 assert sprite.pos == (103, 104)
 sprite.move()
 assert sprite.pos == (106, 108)
-sprite.target_pos == None
-try:
-    sprite.move()
-    raise AssertionError
-except Exception:
-    pass
 
+#TacSprite#set_target_pos
+class Callback:
+    def __init__(self):
+        self.was_called = False
+    
+    def __call__(self):
+        self.was_called = True
+
+callback = Callback()
+sprite.pos = (0, 0)
+sprite.set_target_pos((10, 10), callback)
+for x in range(5):
+    sprite.move()
+
+assert callback.was_called
 
 #BoardView
 hex_positions = [

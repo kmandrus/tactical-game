@@ -22,7 +22,7 @@ class Game:
                 hex_pos = self.board_view.to_hex(pg.mouse.get_pos())
                 sprites = self.board_view.sprites
                 for sprite in sprites:
-                    sprite.target_pos = self.board_view.to_pix(hex_pos)
+                    sprite.set_target_pos(self.board_view.to_pix(hex_pos))
 
     def render(self):
         self.screen.fill((64, 128, 64))
@@ -43,12 +43,15 @@ class Game:
     def get_character(self, id):
         return self.characters[id]
     
-    def move_character(self, character, hex_pos):
+    def move_character(self, character, hex_pos, callback=None):
         if board.is_empty_at(hex_pos):
             board.move_piece(character.get_hex_pos(), hex_pos)
-            sprite.target_pos = board_view.to_pix(hex_pos)
+            self.board_view.move_sprite(
+                character.sprite, 
+                board_view.to_pix(hex_pos),
+                callback)
         else:
-            raise Exception('Destination Tile is not empty')
+            raise Exception('Destination tile is not empty')
 
     
 class Character:
