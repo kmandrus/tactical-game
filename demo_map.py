@@ -43,7 +43,7 @@ board_view = view.BoardView(screen, SCREEN_SIZE, HEX_RADIUS, pos_list)
 #Load sprites and add them to the board_view.
 image = pg.image.load(os.path.join(image_dir, 'token_1.png'))
 pos = board_view.to_pix((3, 5))
-sprite = view.PieceView(image, screen, pos, HEX_RADIUS)
+sprite = view.TacSprite(image, screen, pos, HEX_RADIUS)
 board_view.add_sprite(sprite)
 
 #Instatiate and run the game

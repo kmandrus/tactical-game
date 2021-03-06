@@ -35,27 +35,27 @@ points = [
 assert hexagon.get_points() == points
 
 
-#PieceView
+#TacSprite
 image = pg.image.load('./images/token_1.png')
 pix_pos = (50, 100)
 target_pix_pos = (300, 400)
-sprite = PieceView(image, mock_surface, pix_pos, HEX_RADIUS)
+sprite = TacSprite(image, mock_surface, pix_pos, HEX_RADIUS)
 sprite_size = (math.floor(HEX_RADIUS * 1.5), math.floor(HEX_RADIUS * 1.5))
 assert sprite.image.get_size() == sprite_size
 assert sprite.surface == mock_surface
 assert sprite.pos == pix_pos
 assert sprite.id is None
 
-#PieceView#get_center
+#TacSprite#get_center
 assert sprite.get_center() == (26, 76)
 
-#PieceView#get_velocity
+#TacSprite#get_velocity
 sprite.pos = 100, 100
 sprite.target_pos = 400, 500
 sprite.speed = 5
 assert sprite.get_velocity() == (3, 4)
 
-#PieceView#move
+#TacSprite#move
 sprite.move()
 assert sprite.pos == (103, 104)
 sprite.move()

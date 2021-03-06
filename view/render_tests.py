@@ -33,7 +33,7 @@ board_view = BoardView(screen, DIMENSIONS, RADIUS, create_hex_pos_list(18, 13))
 
 token_art = pg.image.load(os.path.join(images_dir, 'token_1.png'))
 sprite_start_pos = board_view.to_pix((3, 5))
-sprite = PieceView(token_art, screen, sprite_start_pos, RADIUS)
+sprite = TacSprite(token_art, screen, sprite_start_pos, RADIUS)
 
 board_view.add_sprite(sprite)
 

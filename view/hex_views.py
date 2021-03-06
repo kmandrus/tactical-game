@@ -171,7 +171,7 @@ class TileView:
         return (x + dx, y + dy)
 
 
-class PieceView:
+class TacSprite:
     def __init__(self, image, surface, pos, hex_radius):
         self.__size_factor = 1.5
         self.__size = math.floor(hex_radius * self.__size_factor)
