@@ -30,3 +30,21 @@ class Game:
 
     def update(self):
         self.board_view.update()
+
+    
+class Character:
+    __id_counter= 0
+    @classmethod
+    def new_id(cls):
+        cls.__id_counter += 1
+        return cls.__id_counter
+
+    def __init__(self, piece, sprite):
+        self.sprite = sprite
+        self.piece = piece
+        self.__id = Character.new_id()
+        self.piece.id = self.__id
+        self.sprite.id = self.__id
+    
+    def get_id(self):
+        return self.__id
