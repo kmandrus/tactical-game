@@ -18,12 +18,12 @@ class Board:
         self.get_tile(pos).piece = None
         piece.pos = None
 
-    def move_piece(self, start, end):
-        if (piece := self.get_tile(start).piece) and self.is_empty_at(end):
-            self.remove_piece(start)
+    def move_piece(self, piece, end):
+        if self.is_empty_at(end):
+            self.remove_piece(piece.pos)
             self.add_piece(piece, end)
         else:
-            raise Exception(f"Error moving piece from {start} to {end}")
+            raise Exception(f"Error moving piece to {end}")
 
     def get_piece_at(self, pos):
         return self.get_tile(pos).piece

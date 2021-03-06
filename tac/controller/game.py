@@ -43,17 +43,24 @@ class Game:
     def get_character(self, id):
         return self.characters[id]
     
-    def move_character(self, character, hex_pos, callback=None):
+    def move_character(self, character, hex_pos, callback=None, *args):
         if self.board.is_empty_at(hex_pos):
-            self.board.move_piece(character.get_hex_pos(), hex_pos)
+            self.board.move_piece(character.piece, hex_pos)
             self.board_view.move_sprite(
                 character.sprite, 
                 self.board_view.to_pix(hex_pos),
-                callback)
+                callback, *args)
         else:
-            raise Exception('Destination tile is not empty')
-
+            raise Exception(f'Destination tile at {hex_pos} is not empty')
     
+    def path_move(self, character, path):
+        if path:
+            next_pos, remaining_path = path[0], path[1:]
+            self.move_character(character, next_pos,
+                                self.path_move, character, remaining_path)
+        else:
+            self.event_delegate = event_delegate.Nothing_Selected(self)
+
 class Character:
     __id_counter= 0
     @classmethod

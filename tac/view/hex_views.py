@@ -60,9 +60,9 @@ class BoardView:
         for sprite in self.sprites:
             sprite.render()
     
-    def move_sprite(self, sprite, pos, callback=None):
-        sprite.set_target_pos(pos, callback)
-
+    def move_sprite(self, sprite, pos, callback=None, *args):
+        sprite.set_target_pos(pos, callback, *args)
+    
     def to_pix(self, hex_pos):
         x_hex, y_hex = hex_pos
         x_unit, y_unit = self.pix_units
@@ -188,6 +188,7 @@ class TacSprite:
         self.speed = 1
         self.id = None
         self.__on_move_complete = None
+        self.__args = None
     
     def update(self):
         if self.__target_pos:
@@ -207,8 +208,10 @@ class TacSprite:
                 self.pos = self.__target_pos
                 self.__target_pos = None
                 if callback := self.__on_move_complete:
-                    self.on_move_complete = None
-                    callback()
+                    self.__on_move_complete = None
+                    args = self.__args
+                    self.__args = None
+                    callback(*args)
             else:
                 x, y = self.pos
                 delta_x, delta_y = self.get_velocity()
@@ -224,6 +227,8 @@ class TacSprite:
         else:
             raise Exception("target_pos must contain a pixel_position")
     
-    def set_target_pos(self, pos, callback=None):
+    def set_target_pos(self, pos, callback=None, *args):
         self.__target_pos = pos
-        self.__on_move_complete = callback
+        if callback:
+            self.__on_move_complete = callback
+            self.__args = args

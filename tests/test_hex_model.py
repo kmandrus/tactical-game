@@ -64,7 +64,7 @@ assert piece.pos == None
 
 #Board#move_piece
 board.add_piece(piece, pos)
-board.move_piece(pos, other_pos)
+board.move_piece(piece, other_pos)
 assert piece.pos == other_pos
 assert not board.get_tile(pos).piece
 assert not board.get_piece_at(pos)
@@ -73,7 +73,7 @@ assert board.get_tile(other_pos).piece == piece
 assert board.get_piece_at(other_pos) == piece
 assert not board.is_empty_at(other_pos)
 try:
-    board.move_piece(pos, other_pos)
+    board.move_piece(piece, other_pos)
     raise AssertionError
 except Exception:
     pass
