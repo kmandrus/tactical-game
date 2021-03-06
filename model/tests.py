@@ -5,6 +5,7 @@ from hex_model import *
 name = 'Ajani'
 piece = Piece(name)
 assert piece.name == name
+assert piece.id is None
 
 
 #Tile Tests
@@ -17,7 +18,6 @@ assert tile.piece == None
 
 
 #Board Tests
-
 #board#to_empty_grid
 positions = [(x, y) for x in range(10) for y in range(10)]
 grid = to_empty_grid(positions)

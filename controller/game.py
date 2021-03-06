@@ -6,6 +6,7 @@ class Game:
         self.board = board
         self.board_view = board_view
         self.running = True
+        self.characters = {}
     
     def play(self):
         while self.running:
@@ -30,6 +31,17 @@ class Game:
 
     def update(self):
         self.board_view.update()
+    
+    def create_character(self, piece, sprite, hex_pos):
+        new_character = Character(piece, sprite)
+        self.characters[new_character.get_id()] = new_character
+        self.board.add_piece(piece, hex_pos)
+        sprite.pos = self.board_view.to_pix(hex_pos)
+        self.board_view.add_sprite(sprite)
+        return new_character
+    
+    def get_character(self, id):
+        return self.characters[id]
 
     
 class Character:

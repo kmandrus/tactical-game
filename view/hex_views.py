@@ -181,6 +181,7 @@ class PieceView:
         self.target_pos = None
         self.__hex_radius = hex_radius
         self.speed = 1
+        self.id = None
     
     def update(self):
         if self.target_pos:

@@ -44,6 +44,7 @@ sprite_size = (math.floor(HEX_RADIUS * 1.5), math.floor(HEX_RADIUS * 1.5))
 assert sprite.image.get_size() == sprite_size
 assert sprite.surface == mock_surface
 assert sprite.pos == pix_pos
+assert sprite.id is None
 
 #PieceView#get_center
 assert sprite.get_center() == (26, 76)
