@@ -8,7 +8,6 @@ assert piece.name == name
 assert piece.id is None
 assert piece.pos is None
 
-
 #Tile Tests
 tile = Tile()
 assert tile.piece == None

@@ -42,6 +42,13 @@ class Game:
     
     def get_character(self, id):
         return self.characters[id]
+    
+    def move_character(self, character, hex_pos):
+        if board.is_empty_at(hex_pos):
+            board.move_piece(character.get_hex_pos(), hex_pos)
+            sprite.target_pos = board_view.to_pix(hex_pos)
+        else:
+            raise Exception('Destination Tile is not empty')
 
     
 class Character:
@@ -60,3 +67,6 @@ class Character:
     
     def get_id(self):
         return self.__id
+    
+    def get_hex_pos(self):
+        return self.piece.pos
