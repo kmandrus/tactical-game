@@ -5,7 +5,7 @@ import os
 
 import pygame as pg
 
-from hex_views import *
+from tac.view.hex_views import *
 
 def create_hex_pos_list(width, height):
     positions = []
@@ -21,7 +21,7 @@ def create_hex_pos_list(width, height):
 pg.init()
 
 main_dir = os.path.split(os.path.dirname(__file__))[0]
-images_dir = os.path.join(main_dir, 'images')
+images_dir = os.path.join(main_dir, 'tac/images')
 
 DIMENSIONS = (800, 600)
 RADIUS = 64

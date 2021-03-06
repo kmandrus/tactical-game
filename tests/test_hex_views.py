@@ -2,9 +2,9 @@
 import math
 
 import pygame as pg
-import os
 
-from hex_views import *
+from tac.view.hex_views import *
+
 
 #Setup
 pg.init()
@@ -36,7 +36,7 @@ assert hexagon.get_points() == points
 
 
 #TacSprite
-image = pg.image.load('./images/token_1.png')
+image = pg.image.load('./tac/images/token_1.png')
 pix_pos = (50, 100)
 target_pix_pos = (300, 400)
 sprite = TacSprite(image, mock_surface, HEX_RADIUS)

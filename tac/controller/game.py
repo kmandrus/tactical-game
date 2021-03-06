@@ -1,5 +1,7 @@
 import pygame as pg
 
+from tac.controller import event_delegate
+
 class Game:
     def __init__(self, screen, board, board_view):
         self.screen = screen
@@ -7,6 +9,7 @@ class Game:
         self.board_view = board_view
         self.running = True
         self.characters = {}
+        self.event_delegate = event_delegate.Nothing_Selected(self)
     
     def play(self):
         while self.running:
@@ -19,10 +22,7 @@ class Game:
             if event.type == pg.QUIT:
                 self.running = False
             if event.type == pg.MOUSEBUTTONUP:
-                hex_pos = self.board_view.to_hex(pg.mouse.get_pos())
-                sprites = self.board_view.sprites
-                for sprite in sprites:
-                    sprite.set_target_pos(self.board_view.to_pix(hex_pos))
+                self.event_delegate.handle_click(pg.mouse.get_pos())
 
     def render(self):
         self.screen.fill((64, 128, 64))
@@ -36,19 +36,19 @@ class Game:
         new_character = Character(piece, sprite)
         self.characters[new_character.get_id()] = new_character
         self.board.add_piece(piece, hex_pos)
-        sprite.pos = self.board_view.to_pix(hex_pos)
-        self.board_view.add_sprite(sprite)
+        pix_pos = self.board_view.to_pix(hex_pos)
+        self.board_view.add_sprite(sprite, pix_pos)
         return new_character
     
     def get_character(self, id):
         return self.characters[id]
     
     def move_character(self, character, hex_pos, callback=None):
-        if board.is_empty_at(hex_pos):
-            board.move_piece(character.get_hex_pos(), hex_pos)
+        if self.board.is_empty_at(hex_pos):
+            self.board.move_piece(character.get_hex_pos(), hex_pos)
             self.board_view.move_sprite(
                 character.sprite, 
-                board_view.to_pix(hex_pos),
+                self.board_view.to_pix(hex_pos),
                 callback)
         else:
             raise Exception('Destination tile is not empty')

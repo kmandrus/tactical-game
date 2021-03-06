@@ -1,4 +1,7 @@
-from hex_model import *
+import os
+print(os.environ['PYTHONPATH'])
+
+from tac.model.hex_model import *
 
 
 #Piece Tests

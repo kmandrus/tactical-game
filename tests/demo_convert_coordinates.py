@@ -1,6 +1,6 @@
 import pygame as pg
 
-from hex_board_view import BoardView
+from tac.view.hex_views import BoardView
 
 def create_hex_pos_list(width, height):
     positions = []
@@ -32,5 +32,5 @@ while running:
             hex_pos = board.to_hex(pix_pos)
             print(f"pix_pos: {pix_pos}, hex_pos: {hex_pos}")
         screen.fill((64, 128, 64))
-        board.draw()
+        board.render()
         pg.display.update()
