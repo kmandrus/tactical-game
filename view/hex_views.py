@@ -68,8 +68,9 @@ class BoardView:
         x_unit, y_unit = self.pix_units
         return (x_unit * x_hex, y_unit * y_hex)
 
-    def add_sprite(self, sprite):
+    def add_sprite(self, sprite, pos):
         self.sprites.append(sprite)
+        sprite.pos = pos
 
     def to_hex(self, pix_pos):
         partial_hex_pos, remainders = self.__to_partial_hex_pos_and_remainders(
@@ -175,12 +176,13 @@ class TileView:
 
 
 class TacSprite:
-    def __init__(self, image, surface, pos, hex_radius):
+    def __init__(self, image, surface, hex_radius):
         self.__size_factor = 1.5
         self.__size = math.floor(hex_radius * self.__size_factor)
         self.image = pg.transform.scale(image, (self.__size, self.__size))
+
         self.surface = surface
-        self.pos = pos
+        self.pos = None
         self.__target_pos = None
         self.__hex_radius = hex_radius
         self.speed = 1

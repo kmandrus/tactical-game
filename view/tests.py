@@ -39,7 +39,8 @@ assert hexagon.get_points() == points
 image = pg.image.load('./images/token_1.png')
 pix_pos = (50, 100)
 target_pix_pos = (300, 400)
-sprite = TacSprite(image, mock_surface, pix_pos, HEX_RADIUS)
+sprite = TacSprite(image, mock_surface, HEX_RADIUS)
+sprite.pos = pix_pos
 sprite_size = (math.floor(HEX_RADIUS * 1.5), math.floor(HEX_RADIUS * 1.5))
 assert sprite.image.get_size() == sprite_size
 assert sprite.surface == mock_surface
@@ -123,7 +124,15 @@ edge_case_pos_pairs = [
 for pix_pos, hex_pos in edge_case_pos_pairs:
     assert board.to_hex(pix_pos) == hex_pos
 #BoardView#add_sprite
-board.add_sprite('mock_sprite')
-assert board.sprites == ['mock_sprite']
+class MockSprite():
+    def __init__(self):
+        self.pos = None
+
+
+mock_sprite = MockSprite()
+test_pos = (0, 0)
+board.add_sprite(mock_sprite, (0, 0))
+assert board.sprites == [mock_sprite]
+assert mock_sprite.pos == test_pos
 
 print("View unit tests successful!")

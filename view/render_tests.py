@@ -32,10 +32,10 @@ pg.display.set_caption("Render tests for the View package")
 board_view = BoardView(screen, DIMENSIONS, RADIUS, create_hex_pos_list(18, 13))
 
 token_art = pg.image.load(os.path.join(images_dir, 'token_1.png'))
-sprite_start_pos = board_view.to_pix((3, 5))
-sprite = TacSprite(token_art, screen, sprite_start_pos, RADIUS)
+start_pos = board_view.to_pix((3, 5))
+sprite = TacSprite(token_art, screen, RADIUS)
 
-board_view.add_sprite(sprite)
+board_view.add_sprite(sprite, start_pos)
 
 running = True
 while running:
