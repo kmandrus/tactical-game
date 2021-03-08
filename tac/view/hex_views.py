@@ -31,7 +31,7 @@ class BoardView:
     Unfortunately, it's essential to the UI, since it is used to convert the 
     location of a mouse click to the hexagon it lies in. I must remember to draw
     a hexagonal grid with ALL (both implict and explitict) coordinates listed 
-    to understand it. Sorry to myself... in the future.
+    to understand it. Sorry to myself in the future.
     """
 
     def __init__(self, surface, dimensions, hex_radius, hex_pos_list):
@@ -60,9 +60,6 @@ class BoardView:
         for sprite in self.sprites:
             sprite.render()
     
-    def move_sprite(self, sprite, pos, callback=None, *args):
-        sprite.set_target_pos(pos, callback, *args)
-    
     def to_pix(self, hex_pos):
         x_hex, y_hex = hex_pos
         x_unit, y_unit = self.pix_units
@@ -71,6 +68,12 @@ class BoardView:
     def add_sprite(self, sprite, pos):
         self.sprites.append(sprite)
         sprite.pos = pos
+    
+    def toggle_fill(self, hex_pos):
+        if (tile_view := self.get_hexagon(hex_pos)).is_filled:
+            tile_view.is_filled = False
+        else:
+            tile_view.is_filled = True
 
     def to_hex(self, pix_pos):
         partial_hex_pos, remainders = self.__to_partial_hex_pos_and_remainders(
@@ -192,17 +195,23 @@ class TacSprite:
     
     def update(self):
         if self.__target_pos:
-            self.move()
+            self.__move_update()
 
     def render(self):
         self.surface.blit(self.image, self.get_center())
+    
+    def move(self, pix_pos, callback=None, *args):
+        self.__target_pos = pix_pos
+        if callback:
+            self.__on_move_complete = callback
+            self.__args = args
 
     def get_center(self):
         x, y = self.pos
         offset = self.image.get_width() / 2
         return (x - offset, y - offset)
 
-    def move(self):
+    def __move_update(self):
         if self.__target_pos:
             if math.dist(self.pos, self.__target_pos) < self.speed:
                 self.pos = self.__target_pos
@@ -227,6 +236,7 @@ class TacSprite:
         else:
             raise Exception("target_pos must contain a pixel_position")
     
+    ##Deprecate in favor of #move
     def set_target_pos(self, pos, callback=None, *args):
         self.__target_pos = pos
         if callback:

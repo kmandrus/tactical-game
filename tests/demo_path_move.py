@@ -13,12 +13,12 @@ import tac.controller.event_delegate as event_delegate
 class TestPathMove:
     def __init__(self, controller):
         self.controller = controller
-        self.board = controller.board
+        self.board_controller = controller.board_controller
 
     def handle_click(self, click_pix_pos, callback=None):
         id = 1
         path = [(2, 2), (2, 4), (2, 6), (3, 5)]
-        character = self.controller.get_character(id)
+        character = self.board_controller.get_character(id)
         self.controller.event_delegate = event_delegate.SelectionFrozen()
         self.controller.path_move(character, path)
 
@@ -32,7 +32,6 @@ def create_hex_pos_list(width, height):
             else:
                 positions.append((x, (y * 2) + 1))
     return positions
-
 
 #Create filepaths for the main directory and images directory
 test_dir = os.path.dirname(__file__)
@@ -52,10 +51,11 @@ pg.display.set_caption('Battle Map Example')
 #Define list of positions on the board
 pos_list = create_hex_pos_list(9, 6)
 
-#Define the grid, instantiate the board model and view.
+#Define the grid, instantiate the board model, view, and controller.
 grid = model.to_empty_grid(pos_list)
 board = model.Board(grid)
 board_view = view.BoardView(screen, SCREEN_SIZE, HEX_RADIUS, pos_list)
+board_controller = controller.BoardController(board, board_view)
 
 #Load sprites and models.
 image_1 = pg.image.load(os.path.join(image_dir, 'token_1.png'))
@@ -64,7 +64,7 @@ sprite_1 = view.TacSprite(image_1, screen, HEX_RADIUS)
 piece_1 = model.Piece("Makeda")
 
 #Instatiate and run the game
-game = controller.Game(screen, board, board_view)
+game = controller.Game(screen, board_controller)
 game.create_character(piece_1, sprite_1, hex_pos_1)
 game.event_delegate = TestPathMove(game)
 game.play()

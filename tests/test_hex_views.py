@@ -56,10 +56,10 @@ sprite.set_target_pos((400, 500))
 sprite.speed = 5
 assert sprite.get_velocity() == (3, 4)
 
-#TacSprite#move
-sprite.move()
+#TacSprite#update
+sprite.update()
 assert sprite.pos == (103, 104)
-sprite.move()
+sprite.update()
 assert sprite.pos == (106, 108)
 
 #TacSprite#set_target_pos
@@ -74,7 +74,7 @@ callback = Callback()
 sprite.pos = (0, 0)
 sprite.set_target_pos((10, 10), callback)
 for x in range(5):
-    sprite.move()
+    sprite.update()
 
 assert callback.was_called
 

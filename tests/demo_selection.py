@@ -40,6 +40,7 @@ pos_list = create_hex_pos_list(9, 6)
 grid = model.to_empty_grid(pos_list)
 board = model.Board(grid)
 board_view = view.BoardView(screen, SCREEN_SIZE, HEX_RADIUS, pos_list)
+board_controller = controller.BoardController(board, board_view)
 
 #Load sprites and models.
 image_1 = pg.image.load(os.path.join(image_dir, 'token_1.png'))
@@ -53,7 +54,7 @@ sprite_2 = view.TacSprite(image_2, screen, HEX_RADIUS)
 piece_2 = model.Piece("Teferi")
 
 #Instatiate and run the game
-game = controller.Game(screen, board, board_view)
+game = controller.Game(screen, board_controller)
 game.create_character(piece_1, sprite_1, hex_pos_1)
 game.create_character(piece_2, sprite_2, hex_pos_2)
 game.play()

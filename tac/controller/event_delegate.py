@@ -1,34 +1,31 @@
 class Nothing_Selected():
     def __init__(self, controller):
         self.controller = controller
-        self.board = controller.board
-        self.board_view = controller.board_view
+        self.board_controller = controller.board_controller
 
     def handle_click(self, pix_pos):
-        hex_pos = self.board_view.to_hex(pix_pos)
-        if (self.board.is_valid_pos(hex_pos) and 
-            self.board.get_piece_at(hex_pos)):
+        pos = self.board_controller.to_hex(pix_pos)
+        if (self.board_controller.is_valid_pos(pos) and
+            self.board_controller.get_character_at(pos)):
             self.controller.event_delegate = Piece_Selected(
                 self.controller, 
-                hex_pos)
+                pos)
 
 
 class Piece_Selected:
     def __init__(self, controller, piece_pos):
         self.piece_pos = piece_pos
         self.controller = controller
-        self.board = controller.board
-        self.board_view = controller.board_view
-        self.piece = self.board.get_piece_at(piece_pos)
-        self.character = controller.get_character(self.piece.id)
+        self.board_controller = controller.board_controller
+        self.character = self.board_controller.get_character_at(piece_pos)
     
     def handle_click(self, click_pix_pos):
-        click_hex_pos = self.board_view.to_hex(click_pix_pos)
-        if self.board.is_empty_at(click_hex_pos):
+        click_pos = self.board_controller.to_hex(click_pix_pos)
+        if self.board_controller.is_empty_at(click_pos):
             self.controller.event_delegate = SelectionFrozen()
-            self.controller.move_character(
+            self.board_controller.move_character(
                 self.character,
-                click_hex_pos, 
+                click_pos, 
                 self.on_move_complete)
         
     def on_move_complete(self):
