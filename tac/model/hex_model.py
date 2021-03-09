@@ -8,23 +8,22 @@ class Board:
         grid = {}
         with open(filepath) as file:
             for line in file:
-                pos, is_impassible = Board.parse(line)
-                grid[pos] = Tile(is_impassible)
+                x, y, is_impassible = line.split()
+                if is_impassible == 'True':
+                    is_impassible = True
+                else:
+                    is_impassible = False  
+                grid[(int(x), int(y))] = Tile(is_impassible)
         return grid
     
-    @staticmethod
-    def parse(line):
-        pos = (int(line[1]), int(line[4]))
-        is_impassible = bool(line[7:])
-        return (pos, is_impassible)
-
     def __init__(self, grid):
         self.__grid = grid
 
     def save(self, filepath):
         with open(filepath, 'w') as file:
             for pos, tile in self.__grid.items():
-                file.write(f"{pos} {tile.is_impassible}\n")
+                x, y = pos
+                file.write(f"{x} {y} {tile.is_impassible}\n")
 
     def get_tile(self, pos):
         return self.__grid[pos]

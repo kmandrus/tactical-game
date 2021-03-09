@@ -95,9 +95,9 @@ assert board.hex_radius == HEX_RADIUS
 assert board.pix_units == pix_units
 assert isinstance(board.sprites, list)
 
-#BoardView#get_hexagon
+#BoardView#get_tile_view
 for pos in hex_positions:
-    assert isinstance(board.get_hexagon(pos), TileView)
+    assert isinstance(board.get_tile_view(pos), TileView)
 
 #BoardView#to_pix
 x_unit, y_unit = pix_units

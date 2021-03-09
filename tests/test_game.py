@@ -40,6 +40,8 @@ class MockBoard:
     def is_empty_at(self, pos):
         return True
 
+    def get_pos_list(self):
+        return []
 
 class MockBoardView:
     def add_sprite(self, sprite, pos):

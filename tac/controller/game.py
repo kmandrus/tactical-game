@@ -74,13 +74,17 @@ class BoardController:
     def __init__(self, board, board_view):
         self.board = board
         self.board_view = board_view
+        self.tile_controllers = { pos: TileController(
+            board.get_tile(pos), board_view.get_tile_view(pos)) 
+            for pos in board.get_pos_list() }
         self.__characters_by_id = {}
 
     def update(self):
+        for tc in self.tile_controllers.values():
+            tc.update()
         self.board_view.update()
         
     def render(self):
-        ##Add line that renders the background
         self.board_view.render()
         pg.display.update()
 
@@ -115,14 +119,58 @@ class BoardController:
     def to_hex(self, pix_pos):
         return self.board_view.to_hex(pix_pos)
 
-    def set_impassible(self, pos, value):
-        self.board.set_impassible(pos, value)
+    def set_impassible(self, pos, boolean):
+        self.tile_controllers[pos].set_impassible(boolean)
+    
+    def toggle_impassible(self, pos):
+        if (tc := self.tile_controllers[pos]).is_impassible():
+            tc.set_impassible(False)
+        else:
+            tc.set_impassible(True)
 
     def is_impassible(self, pos):
-        return self.board.is_impassible(pos)
+        return self.tile_controllers[pos].is_impassible()
 
     def is_valid_pos(self, pos):
         return self.board.is_valid_pos(pos)
 
     def is_empty_at(self, pos):
         return self.board.is_empty_at(pos)
+    
+
+class TileController:
+    def __init__(self, tile, tile_view):
+        self.tile = tile
+        self.tile_view = tile_view
+    
+    def update(self):
+        if self.tile.is_impassible:
+            self.set_fill(True)
+        else:
+            self.set_fill(False)
+        self.tile_view.update()
+
+    def render(self):
+        self.tile_view.render()
+
+    def is_impassible(self):
+        return self.tile.is_impassible
+    
+    def set_impassible(self, boolean):
+        self.tile.is_impassible = boolean
+
+    def get_piece(self):
+        return self.tile.piece
+
+    def remove_piece(self):
+        self.tile.piece = None
+
+    def add_piece(self, piece):
+        self.tile.piece = piece
+
+    def is_filled(self):
+        return self.tile_view.is_filled
+
+    def set_fill(self, boolean):
+        self.tile_view.is_filled = boolean
+

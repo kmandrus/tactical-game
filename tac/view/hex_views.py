@@ -40,22 +40,22 @@ class BoardView:
         self.hex_radius = hex_radius
         self.pix_units = (self.hex_radius * 1.5,
                           self.hex_radius * (math.sqrt(3) / 2))
-        self.__hexagons = {
+        self.__tile_views = {
             pos: TileView(surface, self.to_pix(pos), hex_radius)
             for pos in hex_pos_list}
         self.sprites = []
 
-    def get_hexagon(self, hex_pos):
-        return self.__hexagons[hex_pos]
+    def get_tile_view(self, hex_pos):
+        return self.__tile_views[hex_pos]
     
     def update(self):
         for sprite in self.sprites:
             sprite.update()
-        for tile in self.__hexagons.values():
+        for tile in self.__tile_views.values():
             tile.update()
 
     def render(self):
-        for hexagon in self.__hexagons.values():
+        for hexagon in self.__tile_views.values():
             hexagon.render()
         for sprite in self.sprites:
             sprite.render()
@@ -70,7 +70,7 @@ class BoardView:
         sprite.pos = pos
     
     def toggle_fill(self, hex_pos):
-        if (tile_view := self.get_hexagon(hex_pos)).is_filled:
+        if (tile_view := self.get_tile_view(hex_pos)).is_filled:
             tile_view.is_filled = False
         else:
             tile_view.is_filled = True
