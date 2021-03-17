@@ -55,11 +55,12 @@ class Game:
             data['is_filled'], pg.Color(data['fill_color']) )
         return TileController(tile, tile_view)
     
-    def save_new(self):
-        self.db_delegate.save_new_board(self.board_controller.get_save_data())
-    
-    def save_update(self):
-        self.db_delegate.update_board(self.board_controller.get_save_data())
+    def save(self):
+        data = self.board_controller.get_save_data()
+        if self.db_delegate.board_exists(self.board_controller.get_name()):
+            self.db_delegate.update_board(data)
+        else:
+            self.db_delegate.save_new_board(data)
         
 
 class PieceController:
@@ -163,6 +164,8 @@ class BoardController:
             } )
         return data
     
+    def get_name(self):
+        return self.board.name
 
 class TileController:
     def __init__(self, tile, tile_view):

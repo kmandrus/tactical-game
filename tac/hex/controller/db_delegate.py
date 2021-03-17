@@ -15,9 +15,9 @@ class PostgresDelegate:
         cursor.execute(SQL, str(id_))
         row = cursor.fetchall()[0]
         cursor.close()
-        return self.to_tile_data(row)
+        return self.__to_tile_data(row)
     
-    def to_tile_data(self, row):
+    def __to_tile_data(self, row):
         id_, name, is_impassible, is_filled, *rgb = row
         return {
             'id': id_, 'name': name, 'is_impassible': is_impassible,
@@ -46,3 +46,32 @@ class PostgresDelegate:
             cursor.execute(SQL, row)
         self.connection.commit()
         cursor.close()
+    
+    def fetch_board_data(self, board_name):
+        SQL = "SELECT * FROM board_tiles WHERE board_name=%s"
+        cursor = self.connection.cursor()
+        cursor.execute(SQL, (board_name,))
+        rows = cursor.fetchall()
+        cursor.close()
+        return self.__to_board_data(rows)
+
+    def __to_board_data(self, rows):
+        data = []
+        for row in rows:
+            name, x, y, tile_id, piece_id = row
+            pos = (x, y)
+            data.append( { 
+                'name': name, 
+                'pos': pos, 
+                'tile_id': tile_id, 
+                'piece_id': piece_id 
+            } )
+        return data
+
+    def board_exists(self, name):
+        SQL = "SELECT * FROM board_tiles WHERE board_name=%s LIMIT 1;"
+        cursor = self.connection.cursor()
+        cursor.execute(SQL, (name, ))
+        result = cursor.fetchall()
+        cursor.close()
+        return len(result) > 0

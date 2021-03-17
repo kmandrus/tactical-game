@@ -26,7 +26,7 @@ class GrassLavaSwap:
     def handle_click(self, click_pix_pos):
         hex_pos = self.controller.board_controller.to_hex(click_pix_pos)
         self.controller.swap_tile(hex_pos)
-        self.controller.save_update()
+        self.controller.save()
 
 
 class Editor(game.Game):
@@ -41,7 +41,7 @@ class Editor(game.Game):
 HEX_RADIUS = 64
 SCREEN_SIZE = (800, 600)
 
-flag, name = sys.argv[1:]
+flag, board_name = sys.argv[1:]
 
 pg.init()
 
@@ -55,24 +55,41 @@ def load_tile(id_, db_delegate):
     tile_view = view.TileView(data['is_filled'], pg.Color(data['fill_color']))
     return game.TileController(tile, tile_view)
 
+
+db_delegate = db_delegate.PostgresDelegate('tactical_game')
+
 if flag == '-n':
-    board = model.Board(name)
-#elif flag == '-l':
-    #pass
+    if db_delegate.board_exists(board_name):
+        raise Exception("Board already exists")
+    else:
+        pos_list = create_hex_pos_list(9, 13)
+        board_data = []
+        for pos in pos_list:
+            x, y = pos
+            board_data.append({
+                'board_name': board_name, 
+                'x': x, 'y': y, 
+                'tile_id': 1, 
+                'piece_id': None})
+elif flag == '-l':
+    if db_delegate.board_exists(board_name):
+        board_data = db_delegate.fetch_board_data(board_name)
+    else:
+        raise Exception("Board does not exist")
 else:
     raise Exception("Command not recognized")
 
-
+board = model.Board(board_name)
 board_view = view.BoardView(screen, SCREEN_SIZE, HEX_RADIUS)
 board_controller = game.BoardController(board, board_view)
 
-db_delegate = db_delegate.PostgresDelegate('tactical_game')
 editor = Editor(screen, board_controller, db_delegate)
 editor.event_delegate = GrassLavaSwap(editor)
 
-pos_list = create_hex_pos_list(13, 9)
-for pos in pos_list:
-    board_controller.add_tile_controller(editor.load_tile(1), pos)
+for row in board_data:
+    board_controller.add_tile_controller(
+        editor.load_tile(row['tile_id']), 
+        row['pos']
+    )
 
-editor.save_new()
 editor.play()
