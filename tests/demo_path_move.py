@@ -18,9 +18,9 @@ class TestPathMove:
     def handle_click(self, click_pix_pos, callback=None):
         id = 1
         path = [(2, 2), (2, 4), (2, 6), (3, 5)]
-        character = self.board_controller.get_character(id)
+        piece_controller = self.board_controller.get_piece_controller(id)
         self.controller.event_delegate = event_delegate.SelectionFrozen()
-        self.controller.path_move(character, path)
+        self.controller.path_move(piece_controller, path)
 
 
 def create_hex_pos_list(width, height):
@@ -65,6 +65,6 @@ piece_1 = model.Piece("Makeda")
 
 #Instatiate and run the game
 game = controller.Game(screen, board_controller)
-game.create_character(piece_1, sprite_1, hex_pos_1)
+game.create_piece_controller(piece_1, sprite_1, hex_pos_1)
 game.event_delegate = TestPathMove(game)
 game.play()

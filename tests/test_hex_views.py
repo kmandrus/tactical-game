@@ -1,4 +1,5 @@
-#View unit tests
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import math
 
 import pygame as pg

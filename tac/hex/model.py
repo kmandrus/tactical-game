@@ -3,30 +3,15 @@ def to_empty_grid(pos_list):
 
 
 class Board:
-    @classmethod
-    def load_grid(cls, filepath):
-        grid = {}
-        with open(filepath) as file:
-            for line in file:
-                x, y, is_impassible = line.split()
-                if is_impassible == 'True':
-                    is_impassible = True
-                else:
-                    is_impassible = False  
-                grid[(int(x), int(y))] = Tile(is_impassible)
-        return grid
+    def __init__(self, name):
+        self.name = name
+        self.__tiles = {}    
     
-    def __init__(self, grid):
-        self.__grid = grid
-
-    def save(self, filepath):
-        with open(filepath, 'w') as file:
-            for pos, tile in self.__grid.items():
-                x, y = pos
-                file.write(f"{x} {y} {tile.is_impassible}\n")
+    def add_tile(self, tile, pos):
+        self.__tiles[pos] = tile 
 
     def get_tile(self, pos):
-        return self.__grid[pos]
+        return self.__tiles[pos]
 
     def add_piece(self, piece, pos):
         self.get_tile(pos).piece = piece
@@ -45,7 +30,7 @@ class Board:
             raise Exception(f"Error moving piece to {end}")
     
     def get_pos_list(self):
-        return self.__grid.keys()
+        return self.__tiles.keys()
     
     def toggle_impassible(self, pos):
         if (tile := self.get_tile(pos)).is_impassible:
@@ -70,7 +55,7 @@ class Board:
     
     def is_valid_pos(self, pos):
         try:
-            self.__grid[pos]
+            self.__tiles[pos]
         except KeyError:
             return False
         return True
@@ -79,13 +64,22 @@ class Board:
 class Piece:
     def __init__(self, name):
         self.name = name
-        self.id = None
+        self.id_ = None
         self.pos = None
 
 
 class Tile:
-    def __init__(self, is_impassible=False):
+    def __init__(self, id_, name, is_impassible):
+        self.id_ = id_
+        self.name = name
         self.piece = None
         self.is_impassible = is_impassible
         #move cost
         #terrain type
+    
+    def to_data(self):
+        if piece:
+            piece_id = piece.id
+        else:
+            piece_id = None
+        return {'tile_id': self.id_, 'piece_id': piece_id}

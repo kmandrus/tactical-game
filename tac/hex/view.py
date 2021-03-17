@@ -34,19 +34,23 @@ class BoardView:
     to understand it. Sorry to myself in the future.
     """
 
-    def __init__(self, surface, dimensions, hex_radius, hex_pos_list):
+    def __init__(self, surface, dimensions, hex_radius):
         self.surface = surface
         self.width, self.height = dimensions
         self.hex_radius = hex_radius
         self.pix_units = (self.hex_radius * 1.5,
                           self.hex_radius * (math.sqrt(3) / 2))
-        self.__tile_views = {
-            pos: TileView(surface, self.to_pix(pos), hex_radius)
-            for pos in hex_pos_list}
+        self.__tile_views = {}
         self.sprites = []
 
     def get_tile_view(self, hex_pos):
         return self.__tile_views[hex_pos]
+    
+    def add_tile_view(self, tile_view, pos):
+        tile_view.surface = self.surface
+        tile_view.center = self.to_pix(pos)
+        tile_view.radius = self.hex_radius
+        self.__tile_views[pos] = tile_view
     
     def update(self):
         for sprite in self.sprites:
@@ -145,29 +149,31 @@ class BoardView:
 
 
 class TileView:
-    def __init__(self, surface, center, radius):
-        self.surface = surface
-        self.center = center
-        self.radius = radius
-        self.half_height = (math.sqrt(3) * radius) / 2
-        self.is_filled = False
-        self.fill_color = pg.Color(0, 0, 200)
+    def __init__(self, is_filled, fill_color):
+        self.surface = None
+        self.center = None
+        self.radius = None
+        self.is_filled = is_filled
+        self.fill_color = fill_color
 
     def update(self):
         pass
 
+    def half_height(self):
+        return math.sqrt(3) * self.radius / 2
+
     def render(self):
-        pg.draw.aalines(self.surface, (0, 0, 0), True, self.get_points())
         if self.is_filled:
             pg.draw.polygon(self.surface, self.fill_color, self.get_points(), 0)
+        pg.draw.aalines(self.surface, (0, 0, 0), True, self.get_points())
 
     def get_points(self):
         deltas = [
-            (-self.radius / 2, -self.half_height),
-            (self.radius / 2, -self.half_height),
+            (-self.radius / 2, -self.half_height()),
+            (self.radius / 2, -self.half_height()),
             (self.radius, 0),
-            (self.radius / 2, self.half_height),
-            (-self.radius / 2, self.half_height),
+            (self.radius / 2, self.half_height()),
+            (-self.radius / 2, self.half_height()),
             (-self.radius, 0)
         ]
         return [self.__apply_delta(self.center, delta) for delta in deltas]
@@ -189,7 +195,7 @@ class TacSprite:
         self.__target_pos = None
         self.__hex_radius = hex_radius
         self.speed = 1
-        self.id = None
+        self.id_ = None
         self.__on_move_complete = None
         self.__args = None
     

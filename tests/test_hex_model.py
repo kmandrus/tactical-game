@@ -1,5 +1,5 @@
 import os
-print(os.environ['PYTHONPATH'])
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 from tac.model.hex_model import *
 
@@ -12,12 +12,12 @@ assert piece.id is None
 assert piece.pos is None
 
 #Tile Tests
-tile = Tile()
+tile = Tile(3, 'test', False)
 assert tile.piece == None
 tile.piece = piece
-assert tile.piece == piece
-tile.piece = None
-assert tile.piece == None
+assert tile.id == 3
+assert tile.name == 'test'
+assert tile.is_impassible == False
 
 
 #Board Tests

@@ -55,6 +55,6 @@ piece_2 = model.Piece("Teferi")
 
 #Instatiate and run the game
 game = controller.Game(screen, board_controller)
-game.create_character(piece_1, sprite_1, hex_pos_1)
-game.create_character(piece_2, sprite_2, hex_pos_2)
+game.create_piece_controller(piece_1, sprite_1, hex_pos_1)
+game.create_piece_controller(piece_2, sprite_2, hex_pos_2)
 game.play()
