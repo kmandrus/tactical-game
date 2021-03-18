@@ -1,4 +1,5 @@
 import sys
+import math
 
 import pygame as pg
 
@@ -16,8 +17,20 @@ def create_hex_pos_list(width, height):
                 positions.append((x, y * 2))
             else:
                 positions.append((x, (y * 2) + 1))
-    return positions
+    return [(x + 1, y + 1) for x, y in positions]
 
+def num_hexagons_wide(pix_width, hex_radius):
+    return math.floor((2 * pix_width) / (3 * hex_radius) - (1 / 3))
+
+def num_hexagons_tall(pix_height, hex_radius):
+    hex_height = math.sqrt(3) * hex_radius
+    return math.floor((pix_height / hex_height) - 1/2 )
+
+def autofit(screen_size, hex_radius):
+    w_pix, h_pix = screen_size
+    w_hex = num_hexagons_wide(w_pix, hex_radius)
+    h_hex = num_hexagons_tall(h_pix, hex_radius)
+    return create_hex_pos_list(w_hex, h_hex)
 
 class GrassLavaSwap:
     def __init__(self, controller):
@@ -25,8 +38,9 @@ class GrassLavaSwap:
 
     def handle_click(self, click_pix_pos):
         hex_pos = self.controller.board_controller.to_hex(click_pix_pos)
-        self.controller.swap_tile(hex_pos)
-        self.controller.save()
+        if self.controller.board_controller.is_valid_pos(hex_pos):
+            self.controller.swap_tile(hex_pos)
+            self.controller.save()
 
 
 class Editor(game.Game):
@@ -38,7 +52,7 @@ class Editor(game.Game):
         self.board_controller.add_tile_controller(tile_c, pos)
 
 
-HEX_RADIUS = 64
+HEX_RADIUS = 32
 SCREEN_SIZE = (800, 600)
 
 flag, board_name = sys.argv[1:]
@@ -62,7 +76,7 @@ if flag == '-n':
     if db_delegate.board_exists(board_name):
         raise Exception("Board already exists")
     else:
-        pos_list = create_hex_pos_list(9, 13)
+        pos_list = autofit(SCREEN_SIZE, HEX_RADIUS)
         board_data = []
         for pos in pos_list:
             board_data.append({
