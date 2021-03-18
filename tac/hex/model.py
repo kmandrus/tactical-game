@@ -32,15 +32,6 @@ class Board:
     def get_pos_list(self):
         return self.__tiles.keys()
     
-    def toggle_impassible(self, pos):
-        if (tile := self.get_tile(pos)).is_impassible:
-            tile.is_impassible = False
-        else:
-            tile.is_impassible = True
-    
-    def set_impassible(self, pos, value):
-        self.get_tile(pos).is_impassible = value
-    
     def is_impassible(self, pos):
         return self.get_tile(pos).is_impassible
 
@@ -76,10 +67,3 @@ class Tile:
         self.is_impassible = is_impassible
         #move cost
         #terrain type
-    
-    def to_data(self):
-        if piece:
-            piece_id = piece.id
-        else:
-            piece_id = None
-        return {'tile_id': self.id_, 'piece_id': piece_id}

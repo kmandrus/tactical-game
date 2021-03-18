@@ -65,10 +65,9 @@ if flag == '-n':
         pos_list = create_hex_pos_list(9, 13)
         board_data = []
         for pos in pos_list:
-            x, y = pos
             board_data.append({
                 'board_name': board_name, 
-                'x': x, 'y': y, 
+                'pos': pos,
                 'tile_id': 1, 
                 'piece_id': None})
 elif flag == '-l':
@@ -89,7 +88,6 @@ editor.event_delegate = GrassLavaSwap(editor)
 for row in board_data:
     board_controller.add_tile_controller(
         editor.load_tile(row['tile_id']), 
-        row['pos']
-    )
+        row['pos'] )
 
 editor.play()
