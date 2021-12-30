@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+#Runs all unit tests in the tactical game project
+echo
+python3 ./tests/test_hex_model.py
+python3 ./tests/test_hex_views.py
+python3 ./tests/test_game.py
+python3 ./tests/test_db_delegate.py
+echo
