@@ -1,28 +1,19 @@
 import pygame as pg
 
+
 from tac.hex.view import BoardView
 
-def create_hex_pos_list(width, height):
-    positions = []
-    for x in range(width):
-        for y in range(height):
-            if x % 2 == 0:
-                positions.append((x, y * 2))
-            else:
-                positions.append((x, (y * 2) + 1))
-    return positions
-
-pg.init()
 
 DIMENSIONS = (800, 600)
 RADIUS = 32
 
+
+pg.init()
 screen = pg.display.set_mode(DIMENSIONS)
 pg.display.set_caption("Pixel to Hexagonal Coordinate Conversion Demo")
 
-# create_hex_pos_list(18, 13)
-board = BoardView(screen, DIMENSIONS, RADIUS)
 
+board = BoardView(screen, DIMENSIONS, RADIUS)
 running = True
 while running:
     for event in pg.event.get():

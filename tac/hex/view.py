@@ -23,7 +23,7 @@ class BoardView:
 
     When calculating conversions between pixel and hexagonal coordinates,
     all of the other implicit points on the hexagonal coordinate grid are 
-    assumed present with doing computations. These are points like (1, 0), 
+    assumed present when doing computations. These are points like (1, 0), 
     (3, 2), etc. These implict points are NOT in the dictionary of hexagons,
     since none of they lay at the center of a hexagon.
 
@@ -40,26 +40,26 @@ class BoardView:
         self.hex_radius = hex_radius
         self.pix_units = (self.hex_radius * 1.5,
                           self.hex_radius * (math.sqrt(3) / 2))
-        self.__tile_views = {}
+        self._tile_views = {}
         self.sprites = []
 
     def get_tile_view(self, hex_pos):
-        return self.__tile_views[hex_pos]
+        return self._tile_views[hex_pos]
     
     def add_tile_view(self, tile_view, pos):
         tile_view.surface = self.surface
         tile_view.center = self.to_pix(pos)
         tile_view.radius = self.hex_radius
-        self.__tile_views[pos] = tile_view
+        self._tile_views[pos] = tile_view
     
     def update(self):
         for sprite in self.sprites:
             sprite.update()
-        for tile in self.__tile_views.values():
+        for tile in self._tile_views.values():
             tile.update()
 
     def render(self):
-        for hexagon in self.__tile_views.values():
+        for hexagon in self._tile_views.values():
             hexagon.render()
         for sprite in self.sprites:
             sprite.render()
@@ -80,28 +80,28 @@ class BoardView:
             tile_view.is_filled = True
 
     def to_hex(self, pix_pos):
-        partial_hex_pos, remainders = self.__to_partial_hex_pos_and_remainders(
+        partial_hex_pos, remainders = self._to_partial_hex_pos_and_remainders(
             pix_pos)
         x_hex, y_hex = partial_hex_pos
         if x_hex % 2 == 0:
             if y_hex % 2 == 0:
-                return self.__hex_pos_for_up_slope(partial_hex_pos, remainders)
+                return self._hex_pos_for_up_slope(partial_hex_pos, remainders)
             else:
-                return self.__hex_pos_for_down_slope(partial_hex_pos, remainders)
+                return self._hex_pos_for_down_slope(partial_hex_pos, remainders)
         else:
             if y_hex % 2 == 0:
-                return self.__hex_pos_for_down_slope(partial_hex_pos, remainders)
+                return self._hex_pos_for_down_slope(partial_hex_pos, remainders)
             else:
-                return self.__hex_pos_for_up_slope(partial_hex_pos, remainders)
+                return self._hex_pos_for_up_slope(partial_hex_pos, remainders)
 
-    def __to_partial_hex_pos_and_remainders(self, pix_pos):
+    def _to_partial_hex_pos_and_remainders(self, pix_pos):
         x_unit, y_unit = self.pix_units
         x_pix, y_pix = pix_pos
         x_hex, x_remainder = x_pix // x_unit, x_pix % x_unit
         y_hex, y_remainder = y_pix // y_unit, y_pix % y_unit
         return ((x_hex, y_hex), (x_remainder, y_remainder))
 
-    def __hex_pos_for_up_slope(self, top_left_hex_pos, remainders):
+    def _hex_pos_for_up_slope(self, top_left_hex_pos, remainders):
         """
         O's are centers of hexagons in a region of the grid.
         If the remainder lies to the left of the upward sloping line,
@@ -124,7 +124,7 @@ class BoardView:
             x, y = top_left_hex_pos
             return (x + 1, y + 1)
 
-    def __hex_pos_for_down_slope(self, top_left_hex_pos, remainders):
+    def _hex_pos_for_down_slope(self, top_left_hex_pos, remainders):
         """
         O's are centers of hexagons in a region of the grid.
         If the remainder lies to the left of the downward sloping line,
@@ -176,9 +176,9 @@ class TileView:
             (-self.radius / 2, self.half_height()),
             (-self.radius, 0)
         ]
-        return [self.__apply_delta(self.center, delta) for delta in deltas]
+        return [self._apply_delta(self.center, delta) for delta in deltas]
 
-    def __apply_delta(self, pos, delta):
+    def _apply_delta(self, pos, delta):
         x, y = pos
         dx, dy = delta
         return (x + dx, y + dy)
@@ -186,46 +186,46 @@ class TileView:
 
 class TacSprite:
     def __init__(self, image, surface, hex_radius):
-        self.__size_factor = 1.5
-        self.__size = math.floor(hex_radius * self.__size_factor)
-        self.image = pg.transform.scale(image, (self.__size, self.__size))
+        self._size_factor = 1.5
+        self._size = math.floor(hex_radius * self._size_factor)
+        self.image = pg.transform.scale(image, (self._size, self._size))
 
         self.surface = surface
         self.pos = None
-        self.__target_pos = None
-        self.__hex_radius = hex_radius
+        self._target_pos = None
+        self._hex_radius = hex_radius
         self.speed = 1
         self.id_ = None
-        self.__on_move_complete = None
-        self.__args = None
+        self._on_move_complete = None
+        self._args = None
     
     def update(self):
-        if self.__target_pos:
-            self.__move_update()
+        if self._target_pos:
+            self._move_update()
 
     def render(self):
         self.surface.blit(self.image, self.get_center())
     
     def move(self, pix_pos, callback=None, *args):
-        self.__target_pos = pix_pos
+        self._target_pos = pix_pos
         if callback:
-            self.__on_move_complete = callback
-            self.__args = args
+            self._on_move_complete = callback
+            self._args = args
 
     def get_center(self):
         x, y = self.pos
         offset = self.image.get_width() / 2
         return (x - offset, y - offset)
 
-    def __move_update(self):
-        if self.__target_pos:
-            if math.dist(self.pos, self.__target_pos) < self.speed:
-                self.pos = self.__target_pos
-                self.__target_pos = None
-                if callback := self.__on_move_complete:
-                    self.__on_move_complete = None
-                    args = self.__args
-                    self.__args = None
+    def _move_update(self):
+        if self._target_pos:
+            if math.dist(self.pos, self._target_pos) < self.speed:
+                self.pos = self._target_pos
+                self._target_pos = None
+                if callback := self._on_move_complete:
+                    self._on_move_complete = None
+                    args = self._args
+                    self._args = None
                     callback(*args)
             else:
                 x, y = self.pos
@@ -233,18 +233,18 @@ class TacSprite:
                 self.pos = (x + delta_x, y + delta_y)
 
     def get_velocity(self):
-        if self.__target_pos:
-            steps = math.dist(self.pos, self.__target_pos) / self.speed
+        if self._target_pos:
+            steps = math.dist(self.pos, self._target_pos) / self.speed
             delta_x, delta_y = [
                 target - pos for pos, target
-                in zip(self.pos, self.__target_pos)]
+                in zip(self.pos, self._target_pos)]
             return (delta_x / steps, delta_y / steps)
         else:
             raise Exception("target_pos must contain a pixel_position")
     
     ##Deprecate in favor of #move
     def set_target_pos(self, pos, callback=None, *args):
-        self.__target_pos = pos
+        self._target_pos = pos
         if callback:
-            self.__on_move_complete = callback
-            self.__args = args
+            self._on_move_complete = callback
+            self._args = args
