@@ -5,7 +5,7 @@ import os
 
 import pygame as pg
 
-from tac.view.hex_views import *
+from tac.hex.view import *
 
 def create_hex_pos_list(width, height):
     positions = []
