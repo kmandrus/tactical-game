@@ -149,7 +149,7 @@ class BoardView:
 
 
 class TileView:
-    def __init__(self, is_filled, fill_color):
+    def __init__(self, is_filled: bool, fill_color: tuple[int, int, int]):
         self.surface = None
         self.center = None
         self.radius = None
@@ -178,7 +178,7 @@ class TileView:
         ]
         return [self._apply_delta(self.center, delta) for delta in deltas]
 
-    def _apply_delta(self, pos, delta):
+    def _apply_delta(self, pos: tuple[int, int], delta: tuple[int, int]):
         x, y = pos
         dx, dy = delta
         return (x + dx, y + dy)

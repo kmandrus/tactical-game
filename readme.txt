@@ -1,6 +1,6 @@
 --> To Do:
 
-Append game's package to the path. Is it best to do this in the __init__.py file, in each exe file (game, editor, etc) or in my rc file? I would imagine in __init__.py ifpossible - that will be inherited by all files in the project and not alter the system environment unduely.
+Convert position tuples to NamedTuples
 
 Ensure all components work correctly
 
@@ -22,6 +22,8 @@ Change BoardView to read it's dimensions off of its surface. This implies the
 BoardView will always be the size of its surface.
 
 Pathfinding
+
+Add a coordinate overlay to TileView
     
 --> Completed:
 
