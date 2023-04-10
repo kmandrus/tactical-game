@@ -1,5 +1,11 @@
-def to_empty_grid(pos_list):
-    return {pos: Tile() for pos in pos_list}
+from typing import Dict, List
+from collections import namedtuple
+
+BoardPosition = namedtuple("BoardPosition", ["x", "y"])
+
+
+def to_empty_grid(positions: List[BoardPosition]) -> Dict[BoardPosition, Tile]:
+    return {pos: Tile() for pos in positions}
 
 
 class Board:
@@ -55,7 +61,7 @@ class Board:
 class Piece:
     def __init__(self, name):
         self.name = name
-        self.id_ = None
+        self.id = None
         self.pos = None
 
 
