@@ -1,17 +1,10 @@
-from typing import Dict, List, Optional
+from typing import List, Optional
 from collections import namedtuple
-from hashlib import md5
-from datetime import datetime
-from random import random
+
+from tac.hex.model.utils import new_id 
 
 BoardPosition = namedtuple("BoardPosition", ["x", "y"])
 
-
-def new_id(name: str, creation_time: datetime = datetime.now(), salt: float = random()) -> str:
-    unique_hash = md5()
-    unique_hash.update(f"{name}_{creation_time}_{salt}".encode('utf8'))
-    return f"{name}_{unique_hash.hexdigest()}"  
-    
 
 class Piece:
     def __init__(self, name: str):
@@ -28,10 +21,6 @@ class Tile:
         self.is_impassible = is_impassible
         #move cost
         #terrain type
-
-
-def to_hex_map(positions: List[BoardPosition]) -> Dict[BoardPosition, Tile]:
-    return {pos: Tile("Grass", False) for pos in positions}
 
 
 class Board:

@@ -1,32 +1,15 @@
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
-from hex.model import *
+from tac.hex.model import Piece
 
-def test_piece():
-    name = "Ajani"
-    piece = Piece(name)
-    assert piece.name == name
-    assert piece.id is None
-    assert piece.pos is None
+def test_to_empty_grid_utility():
+    pass
 
-# #Piece Tests
-# name = 'Ajani'
-# piece = Piece(name)
-# assert piece.name == name
-# assert piece.id is None
-# assert piece.pos is None
-# 
-# #Tile Tests
-# tile = Tile(3, 'test', False)
-# assert tile.piece == None
-# tile.piece = piece
-# assert tile.id == 3
-# assert tile.name == 'test'
-# assert tile.is_impassible == False
-# 
-# 
-# #Board Tests
+class TestBoard:
+    pass
+
+# Board Tests
 # #board#to_empty_grid
 # positions = [(x, y) for x in range(10) for y in range(10)]
 # grid = to_empty_grid(positions)
