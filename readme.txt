@@ -1,10 +1,15 @@
 --> To Do:
 
-Convert position tuples to NamedTuples
+
+Add type hints and documentation.
 
 Ensure all components work correctly
 
 Migrate to Pytest
+
+Develop a persistence strategy
+
+Research unique random identifiers
 
 Figure out how to write tests that expect a certain function to be called.
 One place this is relevant is in #update and #render tests in the view package.
@@ -26,6 +31,8 @@ Pathfinding
 Add a coordinate overlay to TileView
     
 --> Completed:
+
+Convert position tuples to NamedTuples
 
 Combine the HexagonView and HexBoardView into one module. Sprite probably needs
 to go in there too - it computes a bunch of stuff based on the assumption it lives
