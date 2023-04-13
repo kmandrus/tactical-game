@@ -1,14 +1,12 @@
 --> To Do:
 
-Re-test and update first demo. Clean up old versions of demo.
+Re-test and update first demo.
 
 Add type hints and documentation.
 
 Ensure all components work correctly
 
 Migrate to Pytest
-
-Reorganize packages to push hex/square variations deeper in the hierarchy.
 
 Move Board#move_piece to Game class
 

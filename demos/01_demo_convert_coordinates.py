@@ -1,7 +1,7 @@
 import pygame as pg
 
 
-from tac.hex.view import BoardView, TileView
+from tac.view import BoardView, TileView
 
 
 DIMENSIONS = (800, 600)
