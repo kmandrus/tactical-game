@@ -1,7 +1,9 @@
-from typing import List, Optional
+from typing import Dict, Set, Optional
 from collections import namedtuple
 
-from tac.hex.model.utils import new_id 
+from tac.utils import new_id
+from tac.exceptions import TileDoesNotExistError, InvalidMoveError
+
 
 BoardPosition = namedtuple("BoardPosition", ["x", "y"])
 
@@ -10,7 +12,6 @@ class Piece:
     def __init__(self, name: str):
         self.name = name
         self.id: Optional[str] = None
-        self.pos: Optional[BoardPosition] = None
 
 
 class Tile:
@@ -23,45 +24,55 @@ class Tile:
         #terrain type
 
 
+def get_empty_hex_map(height: int, width: int, tile_name: str) -> Dict[BoardPosition, Tile]:
+    map = {}
+    for y in range(height):
+        for x in range(width):
+            if (y % 2) == (x % 2):
+                map[BoardPosition(x, y)] = Tile(tile_name, False)
+    return map
+
+
 class Board:
-    def __init__(self, name: str):
+    def __init__(self, name: str, tiles: Dict[BoardPosition, Tile]):
         self.name = name
-        self._tiles = {}    
+        self._tiles = tiles
+
+    @property
+    def positions(self) -> Set[BoardPosition]:
+        return set(self._tiles.keys())
 
     def add_tile(self, tile: Tile, pos: BoardPosition) -> None:
         self._tiles[pos] = tile 
 
     def get_tile(self, pos: BoardPosition) -> Tile:
-        return self._tiles[pos]
+        if self.is_valid_pos(pos):
+            return self._tiles[pos]
+        raise TileDoesNotExistError(f"Position: {pos} does not exist")
+    
+    def remove_tile(self, pos: BoardPosition) -> Tile:
+        if self.is_valid_pos(pos):
+            self._tiles.pop(pos)
 
     def add_piece(self, piece: Piece, pos: BoardPosition) -> None:
         self.get_tile(pos).piece = piece
-        piece.pos = pos
 
     def remove_piece(self, pos: BoardPosition) -> None:
-        piece = self.get_piece_at(pos)
         self.get_tile(pos).piece = None
-        piece.pos = None
 
-    def move_piece(self, piece: Piece, end: BoardPosition) -> None:
-        if self.is_empty_at(end):
-            self.remove_piece(piece.pos)
-            self.add_piece(piece, end)
-        else:
-            raise Exception(f"Error moving piece to {end}")
-    
-    def get_pos_list(self) -> List[BoardPosition]:
-        return self._tiles.keys()
+    def move_piece(self, start: BoardPosition, end: BoardPosition) -> None:
+        if self.is_empty(start):
+            raise InvalidMoveError(f"No piece to move at start position: {start}")
+        if not self.is_empty(end):
+            raise InvalidMoveError(f"End position, {end}, occupied by another piece")
+        piece = self.get_tile(start).piece
+        self.remove_piece(start)
+        self.add_piece(piece, end)
     
     def is_impassible(self, pos: BoardPosition) -> bool:
         return self.get_tile(pos).is_impassible
 
-    def get_piece_at(self, pos: BoardPosition) -> Piece:
-        if not self.is_valid_pos(pos):
-            raise Exception('Invalid Position')
-        return self.get_tile(pos).piece
-
-    def is_empty_at(self, pos: BoardPosition) -> bool:
+    def is_empty(self, pos: BoardPosition) -> bool:
         return self.get_tile(pos).piece == None
     
     def is_valid_pos(self, pos: BoardPosition) -> bool:

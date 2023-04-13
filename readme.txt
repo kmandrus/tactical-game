@@ -1,11 +1,14 @@
 --> To Do:
 
-
 Add type hints and documentation.
 
 Ensure all components work correctly
 
 Migrate to Pytest
+
+Reorganize packages to push hex/square variations deeper in the hierarchy.
+
+Move Board#move_piece to Game class
 
 Develop a persistence strategy
 
