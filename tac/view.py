@@ -3,7 +3,7 @@ import math
 import pygame as pg
 
 
-class BoardView:
+class HexBoardView:
     """
     A View to represent a Hexagonal Coordinate System
 
@@ -19,7 +19,7 @@ class BoardView:
 
     When the hexagons' centers are mapped to pixel coordinates, the x-unit is
     1.5 a hexagon's radius and the y-unit is half the height of a hexagon
-    (a hexagons radius time the square root of 3 over 2).
+    (a hexagon's radius times the square root of 3 over 2).
 
     When calculating conversions between pixel and hexagonal coordinates,
     all of the other implicit points on the hexagonal coordinate grid are 
@@ -27,7 +27,7 @@ class BoardView:
     (3, 2), etc. These implict points are NOT in the dictionary of hexagons,
     since none of they lay at the center of a hexagon.
 
-    The function to convert from pixel to hex coordinates is... complicated.
+    The function to convert from pixel to hex coordinates is complicated.
     Unfortunately, it's essential to the UI, since it is used to convert the 
     location of a mouse click to the hexagon it lies in. I must remember to draw
     a hexagonal grid with ALL (both implict and explitict) coordinates listed 
@@ -36,7 +36,8 @@ class BoardView:
 
     def __init__(self, surface, dimensions, hex_radius):
         self.surface = surface
-        self.width, self.height = dimensions
+        self.width = dimensions.width
+        self.height = dimensions.height
         self.hex_radius = hex_radius
         self.pix_units = (self.hex_radius * 1.5,
                           self.hex_radius * (math.sqrt(3) / 2))
@@ -148,7 +149,7 @@ class BoardView:
             return (x + 1, y)
 
 
-class TileView:
+class HexTileView:
     def __init__(self, is_filled: bool, fill_color: tuple[int, int, int]):
         self.surface = None
         self.center = None

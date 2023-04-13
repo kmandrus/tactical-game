@@ -1,11 +1,12 @@
-from typing import Dict, Set, Optional
-from collections import namedtuple
+from typing import Dict, Set, Optional, NamedTuple
 
 from tac.utils import new_id
 from tac.exceptions import TileDoesNotExistError, InvalidMoveError
 
 
-BoardPosition = namedtuple("BoardPosition", ["x", "y"])
+class BoardPosition(NamedTuple):
+    x: int
+    y: int
 
 
 class Piece:

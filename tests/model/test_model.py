@@ -6,7 +6,7 @@ from tac.exceptions import TileDoesNotExistError, InvalidMoveError
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
-from tac.model.model import Board, Piece, Tile, BoardPosition, get_empty_hex_map
+from tac.model.components import Board, Piece, Tile, BoardPosition, get_empty_hex_map
 
 @pytest.fixture
 def origin() -> BoardPosition:

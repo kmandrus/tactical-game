@@ -1,5 +1,9 @@
 --> To Do:
 
+Refactor model, demo, and test to use Dimensions and Point NamedTuples
+
+Fix alignment and height of BoardView
+
 Re-test and update first demo.
 
 Add type hints and documentation.
