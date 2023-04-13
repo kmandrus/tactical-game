@@ -6,7 +6,7 @@ from tac.exceptions import TileDoesNotExistError, InvalidMoveError
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
-from tac.hex.model.model import Board, Piece, Tile, BoardPosition, get_empty_hex_map
+from tac.model.model import Board, Piece, Tile, BoardPosition, get_empty_hex_map
 
 @pytest.fixture
 def origin() -> BoardPosition:
@@ -38,15 +38,6 @@ def board_with_piece(piece, origin) -> Board:
     board.add_piece(piece, origin)
     return board
 
-
-def test_get_empty_hex_map():
-# #board#to_empty_grid
-# positions = [(x, y) for x in range(10) for y in range(10)]
-# grid = to_empty_grid(positions)
-# for pos in positions:
-#     assert grid[pos]
-#     assert not grid[pos].piece
-    pass
 
 class TestBoard:
     def test_add_tile(self, empty_board, test_tile, origin):

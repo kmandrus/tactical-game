@@ -1,5 +1,7 @@
 --> To Do:
 
+Re-test and update first demo. Clean up old versions of demo.
+
 Add type hints and documentation.
 
 Ensure all components work correctly
