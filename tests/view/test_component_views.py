@@ -3,9 +3,59 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import math
 
 import pygame as pg
+import pytest
 
-from tac.view.hex_views import *
+from tac.view.component_views import HexBoardView, HexTileView 
 
+
+"""
+Is it possible to mock pygame in a way that makes the wrapper module
+less painful later?
+"""
+
+
+class TestHexTileView:
+    def test_render_with_fill(self):
+        pass
+
+    def test_render_without_fill(self):
+        pass
+
+    def test_get_points(self):
+        pass
+
+
+class TextHexBoardView:
+    def test_get_tile_view(self):
+        pass
+
+    def test_to_pix_conversion(self):
+        pass
+
+    def test_to_hex_conversion(self):
+        pass
+
+    def test_to_hex_edge_cases(self):
+        pass
+
+    def test_add_sprite(self):
+        pass
+
+
+class TestTacSprite:
+    def test_size(self):
+        pass
+
+    def test_id(self):
+        pass
+
+    def test_set_target_pos(self):
+        pass
+
+    def test_update(self):
+        # split into component tests...
+        # test position
+        pass
 
 #Setup
 pg.init()

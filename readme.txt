@@ -1,5 +1,7 @@
 --> To Do:
 
+update tests for view module
+
 Refactor model, demo, and test to use Dimensions and Point NamedTuples
 
 Fix alignment and height of BoardView
@@ -11,6 +13,8 @@ Add type hints and documentation.
 Ensure all components work correctly
 
 Migrate to Pytest
+
+Wrap subset of pygame used into its own module.
 
 Move Board#move_piece to Game class
 
